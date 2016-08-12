@@ -1,0 +1,620 @@
+swagger: '2.0'
+info:
+  version: "2.0.0"
+  title: Double Dutch API
+host: localhost:8080
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /
+paths:
+  /anneal/fullFactorial:
+    post:
+      description: |
+        Designs a genetic library based on a full factorial design with any number of factors and any number of levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the full factorial design.
+      parameters:
+        - name: fullFactorialinput 
+          in: body
+          description: Full factorial design parameters 
+          required: true
+          schema:
+            $ref: '#/definitions/annealFullFactorial'
+      tags:
+        - anneal
+        - fullFactorial
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /anneal/fractionalFactorial:
+    post:
+      description: |
+        Designs a genetic library based on a fractional factorial design with any number of factors and 2 levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the fractional factorial design.
+      parameters:
+        - name: fractionalFactorialinput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/annealFracFactorial'
+      tags:
+        - anneal
+        - fractionalFactorial
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /anneal/plackettBurman:
+    post:
+      description: |
+        Designs a genetic library based on a Plackett-Burman design (2 levels per factor) with up to 23 factors. Uses simulated annealing to assign part modules for controlling gene expression to the Plackett-Burman design.
+      parameters:
+        - name: plackettBurmaninput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/annealPlackettBurman'
+      tags:
+        - anneal
+        - plackettBurman
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /anneal/boxBehnken:
+    post:
+      description: |
+        Designs a genetic library based on a Box-Behnken design (3 levels per factor) with between 3 and 12 factors (but not 8). Uses simulated annealing to assign part modules for controlling gene expression to the Box-Behnken design.
+      parameters:
+        - name: boxBehnkeninput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/annealBoxBehnken'
+      tags:
+        - anneal
+        - boxBehnken
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /greedy/fullFactorial:
+    post:
+      description: |
+        Designs a genetic library based on a full factorial design with any number of factors and any number of levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the full factorial design.
+      parameters:
+        - name: fullFactorialinput 
+          in: body
+          description: Full factorial design parameters 
+          required: true
+          schema:
+            $ref: '#/definitions/greedyFullFactorial'
+      tags:
+        - greedy
+        - fullFactorial
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /greedy/fractionalFactorial:
+    post:
+      description: |
+        Designs a genetic library based on a fractional factorial design with any number of factors and 2 levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the fractional factorial design.
+      parameters:
+        - name: fractionalFactorialinput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/greedyFracFactorial'
+      tags:
+        - greedy
+        - fractionalFactorial
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /greedy/plackettBurman:
+    post:
+      description: |
+        Designs a genetic library based on a Plackett-Burman design (2 levels per factor) with up to 23 factors. Uses simulated annealing to assign part modules for controlling gene expression to the Plackett-Burman design.
+      parameters:
+        - name: plackettBurmaninput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/greedyPlackettBurman'
+      tags:
+        - greedy
+        - plackettBurman
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /greedy/boxBehnken:
+    post:
+      description: |
+        Designs a genetic library based on a Box-Behnken design (3 levels per factor) with between 3 and 12 factors (but not 8). Uses simulated annealing to assign part modules for controlling gene expression to the Box-Behnken design.
+      parameters:
+        - name: boxBehnkeninput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/greedyBoxBehnken'
+      tags:
+        - greedy
+        - boxBehnken
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+
+  /rep/fullFactorial:
+    post:
+      description: |
+        Designs a genetic library based on a full factorial design with any number of factors and any number of levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the full factorial design.
+      parameters:
+        - name: fullFactorialinput 
+          in: body
+          description: Full factorial design parameters 
+          required: true
+          schema:
+            $ref: '#/definitions/greedyFullFactorial'
+      tags:
+        - rep
+        - fullFactorial
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /rep/fractionalFactorial:
+    post:
+      description: |
+        Designs a genetic library based on a fractional factorial design with any number of factors and 2 levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the fractional factorial design.
+      parameters:
+        - name: fractionalFactorialinput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/greedyFracFactorial'
+      tags:
+        - rep
+        - fractionalFactorial
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /rep/plackettBurman:
+    post:
+      description: |
+        Designs a genetic library based on a Plackett-Burman design (2 levels per factor) with up to 23 factors. Uses simulated annealing to assign part modules for controlling gene expression to the Plackett-Burman design.
+      parameters:
+      
+        - name: plackettBurmaninput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/greedyPlackettBurman'
+      tags:
+        - rep
+        - plackettBurman
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+  /rep/boxBehnken:
+    post:
+      description: |
+        Designs a genetic library based on a Box-Behnken design (3 levels per factor) with between 3 and 12 factors (but not 8). Uses simulated annealing to assign part modules for controlling gene expression to the Box-Behnken design.
+      parameters:
+        - name: boxBehnkeninput 
+          in: body
+          description: task object
+          required: true
+          schema:
+            $ref: '#/definitions/greedyBoxBehnken'
+      tags:
+        - rep
+        - boxBehnken
+      responses:
+        200:
+          description: Successful response
+          schema: 
+            $ref: '#/definitions/Output'
+        500:
+          description: Error
+          schema: 
+            type: string
+            example: "Could not add Task"
+            
+definitions:
+  annealFullFactorial:
+    description: Full factorial design parameters. The number of factors and number of levels per factor are encoded by numsLevelsPerFactor. For example, a 5 by 3 full factorial design would have a numsLevelsPerFactor of [3, 3, 3, 3, 3]. If some factors in such a design only take on 2 levels, then numsLevelPerFactor could be [3, 3, 3, 2, 2].
+    properties:
+      numsLevelsPerFactor:
+        type: array
+        items:
+          type: number
+          format: integer
+      partsLibrary:
+        $ref: '#/definitions/partsLibrary'
+      annealingOptions:
+        $ref: '#/definitions/annealingOptions'
+      weights:
+        $ref: '#/definitions/weights'
+      numClusterings:
+        type: number
+        format: integer
+        description: Number of trials of k-means clustering to determine target values for design levels
+      constraints:
+        type: object
+        description: "keys are geneIDs, while values are arrays of strings with the lnode names"
+        
+  annealFracFactorial:
+    description: Fractional factorial design parameters
+    properties:
+      numFactors:
+        type: number
+        format: integer
+        description: Number of factors in design
+      resolution:
+        type: number
+        format: integer
+        description: Resolution of design. Must be 3, 4, or 5. Higher resolution increases the number of variants in library, but makes it possible to distinguish between the main effects and interaction effects of factors (decreases the number of aliasing relationships between factors).
+      partsLibrary:
+        $ref: '#/definitions/partsLibrary'
+      annealingOptions:
+        $ref: '#/definitions/annealingOptions'
+      weights:
+        $ref: '#/definitions/weights'
+      numClusterings:
+        type: number
+        format: integer
+        description: Number of trials of k-means clustering to determine target values for design levels
+      constraints:
+        type: object
+        description: "keys are geneIDs, while values are arrays of strings with the lnode names"  
+      
+  annealPlackettBurman:
+    description: Plackett-Burman/Box-Behnken design parameters
+    properties:
+      numFactors:
+        type: number
+        format: integer
+        description: Number of factors in design
+      partsLibrary:
+        $ref: '#/definitions/partsLibrary'
+      annealingOptions:
+        $ref: '#/definitions/annealingOptions'
+      weights:
+        $ref: '#/definitions/weights'
+      numClusterings:
+        type: number
+        format: integer
+        description: Number of trials of k-means clustering to determine target values for design levels
+      constraints:
+        type: object
+        description: "keys are geneIDs, while values are arrays of strings with the lnode names"  
+  
+  annealBoxBehnken:
+    description: Plackett-Burman/Box-Behnken design parameters
+    properties:
+      numFactors:
+        type: number
+        format: integer
+        description: Number of factors in design
+      partsLibrary:
+        $ref: '#/definitions/partsLibrary'
+      annealingOptions:
+        $ref: '#/definitions/annealingOptions'
+      weights:
+        $ref: '#/definitions/weights'
+      numClusterings:
+        type: number
+        format: integer
+        description: Number of trials of k-means clustering to determine target values for design levels
+      constraints:
+        type: object
+        description: "keys are geneIDs, while values are arrays of strings with the lnode names"
+        
+  greedyFullFactorial:
+    description: Full factorial design parameters. The number of factors and number of levels per factor are encoded by numsLevelsPerFactor. For example, a 5 by 3 full factorial design would have a numsLevelsPerFactor of [3, 3, 3, 3, 3]. If some factors in such a design only take on 2 levels, then numsLevelPerFactor could be [3, 3, 3, 2, 2].
+    properties:
+      numsLevelsPerFactor:
+        type: array
+        items:
+          type: number
+          format: integer
+      partsLibrary:
+        $ref: '#/definitions/partsLibrary'
+      greedyOptions:
+        $ref: '#/definitions/greedyOptions'
+      weights:
+        $ref: '#/definitions/weights'
+      numClusterings:
+        type: number
+        format: integer
+        description: Number of trials of k-means clustering to determine target values for design levels
+      constraints:
+        type: object
+        description: "keys are geneIDs, while values are arrays of strings with the lnode names"
+        
+  greedyFracFactorial:
+    description: Fractional factorial design parameters
+    properties:
+      numFactors:
+        type: number
+        format: integer
+        description: Number of factors in design
+      resolution:
+        type: number
+        format: integer
+        description: Resolution of design. Must be 3, 4, or 5. Higher resolution increases the number of variants in library, but makes it possible to distinguish between the main effects and interaction effects of factors (decreases the number of aliasing relationships between factors).
+      partsLibrary:
+        $ref: '#/definitions/partsLibrary'
+      greedyOptions:
+        $ref: '#/definitions/greedyOptions'
+      weights:
+        $ref: '#/definitions/weights'
+      numClusterings:
+        type: number
+        format: integer
+        description: Number of trials of k-means clustering to determine target values for design levels
+      constraints:
+        type: object
+        description: "keys are geneIDs, while values are arrays of strings with the lnode names"  
+      
+  greedyPlackettBurman:
+    description: Plackett-Burman/Box-Behnken design parameters
+    properties:
+      numFactors:
+        type: number
+        format: integer
+        description: Number of factors in design
+      partsLibrary:
+        $ref: '#/definitions/partsLibrary'
+      greedyOptions:
+        $ref: '#/definitions/greedyOptions'
+      weights:
+        $ref: '#/definitions/weights'
+      numClusterings:
+        type: number
+        format: integer
+        description: Number of trials of k-means clustering to determine target values for design levels
+      constraints:
+        type: object
+        description: "keys are geneIDs, while values are arrays of strings with the lnode names"  
+  
+  greedyBoxBehnken:
+    description: Plackett-Burman/Box-Behnken design parameters
+    properties:
+      numFactors:
+        type: number
+        format: integer
+        description: Number of factors in design
+      partsLibrary:
+        $ref: '#/definitions/partsLibrary'
+      greedyOptions:
+        $ref: '#/definitions/greedyOptions'
+      weights:
+        $ref: '#/definitions/weights'
+      numClusterings:
+        type: number
+        format: integer
+        description: Number of trials of k-means clustering to determine target values for design levels
+      constraints:
+        type: object
+        description: "keys are geneIDs, while values are arrays of strings with the lnode names"
+ 
+  partsLibrary:
+    description: Lists of part identifiers and matrix of part parameters. Coding sequences should be identified in geneIDs, while other parts for controlling gene expression should be identified in rowPartIDs or columnPartIDs. The combination of the ith row part and jth column part should be associated with the parameter at coordinates (i,j) in partParameters. All part IDs must begin with 'p', 'r', 'c', or 't' to indicate whether the identified part is a promoter, RBS, coding sequence, or terminator, respectively. In addition, all row parts must be the same type, and all column parts must be the same type, but a row part must not be the same type as a column part.
+    properties:
+      rowPartIDs:
+        type: array
+        items:
+          type: string
+      columnPartIDs:
+        type: array
+        items:
+          type: string
+      geneIDs:
+        type: array
+        items:
+          type: string
+      partParameters: 
+        type: array
+        items:
+          type: array
+          items:
+            type: number
+            format: integer
+  
+  annealingOptions:
+    description: Options for module assignment with simulated annealing
+    properties:
+      numAnnealings:
+        type: number
+        format: integer
+        description: Number of trials of simulated annealing
+      iterPerAnnealing:
+        type: number
+        format: integer
+        description: Number of module assignment iterations during a trial
+      initialTemp:
+        type: number
+        format: double
+        description: The initial temperature for simulated annealing. To guarantee that the final temperature is one, the current temperature is multiplied by a factor of (1/initialTemp)^(1/iterPerAnnealing) with each iteration.
+      probDecay:
+        type: number
+        format: double
+        description: Constant that partly determines probability of accepting changes that make the module assignment worse. This probability is equal to e^(probDecay*(initialTemp/currentTemp)*deltaAssign), where deltaAssign is the difference in cost between the new assignment and old assignment.
+      synthesisOption:
+        type: string
+        enum: ["minimize", "maximize"]
+        description: Indicates whether goal is the to minimize or maximize the number of unique parts in the module assignment
+  
+  greedyOptions:
+    description: Options for module assignment with simulated annealing
+    properties:
+      numTrials:
+        type: number
+        format: integer
+        description: Number of trials of greedy
+      synthesisOption:
+        type: string
+        enum: ["minimize", "maximize"]
+        description: Indicates whether goal is the to minimize or maximize the number of unique parts in the module assignment
+     
+  weights:
+    description: Weights for module assignment cost function. Larger weights bias the module assignment towards the design concerns associated with those weights. Cost function is the sum of each design concern multiplied by its weight.
+    properties:
+      levelMatch:
+        type: number
+        format: double
+        description: Multiplies level matching cost (based on total difference between design levels and parameters of assigned modules)
+      homology:
+        type: number
+        format: double
+        description: Multiplies pathway homology cost (based on number of parts repeated between modules assigned to different factors, which is proportional to the number of parts repeated within each construct variant in output library)
+      synthesis:
+        type: number
+        format: double
+        description: Multiplies DNA synthesis cost (based on number of unique parts in module assignment, which is proportional to the number of unique parts in output library)
+  
+  Output:
+    description: Results of a module assignment, including the assignment, its cost and weights, and the derived genetic library encoded as Library and LevelLibrary. Library can be used to plan the physical assembly of the library, while LevelLibrary can be used to analyze and create a regression model of the library following testing. The first row of both Library and LevelLibrary is a list of coding sequence IDs. Subsequent rows in Library are lists of IDs for the part modules that vary the expression of the coding sequence with the same index. Subsequent rows in LevelLibrary are lists of the parameters (such as expression strength) associated with these modules. 
+    properties:
+      Level Matching Weight:
+        type: number
+        format: double
+        description: Multiplies level matching cost (total difference between design levels and parameters of assigned modules)
+      Pathway Homology Weight:
+        type: number
+        format: double
+        description: Multiplies pathway homology cost (based on number of parts repeated between modules assigned to different factors, which is proportional to the number of parts repeated within each variant in output library)
+      DNA Synthesis Weight:
+        type: number
+        format: double
+        description: Multiplies DNA synthesis cost (based on number of unique parts in module assignment, which is proportional to the number of unique parts in output library)
+      Level Matching Cost:
+        type: number
+        format: double
+        description: Based on total difference between design levels and parameters of assigned modules. Ranges from 0 (best) to 1 (worst).
+      Pathway Homology Cost:
+        type: number
+        format: double
+        description: Based on number of parts repeated between modules assigned to different factors, which is proportional to the number of parts repeated within each variant in output library. Ranges from 0 (best) to 1 (worst).
+      DNA Synthesis Cost:
+        type: number
+        format: double
+        description: Based on number of unique parts in module assignment, which is proportional to the number of unique parts in output library. Ranges from 0 (best) to 1 (worst).
+      Total Assignment Cost:
+        type: number
+        format: double
+        description: Sum of the level matching, pathway homology, and DNA synthesis costs. Ranges from 0 (best) to 3 (worst).
+      Weighted Total Assignment Cost:
+        type: number
+        format: double
+        description: Sum of the weighted level matching, pathway homology, and DNA synthesis costs. Ranges from 0 (best) to the sum of the level matching, pathway homology, DNA synthesis weights (worst).
+      Module Assignment:
+        type: object
+        description: Mapping from the available part modules to the given factorial design. Each key in mapping is the ID of a coding sequence assigned to a factor of the design, while each value is an array of the module IDs assigned to the levels that a factor takes on.
+      Library:
+        type: array
+        items:
+          type: array
+          items:
+            type: string
+      LevelLibrary:
+        type: array
+        items:
+          type: array
+          items:
+            type: number
+            format: integer
