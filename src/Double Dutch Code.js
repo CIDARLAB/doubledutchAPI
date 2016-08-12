@@ -1461,7 +1461,6 @@ function flSolver() {
             while(!sameCost) {
                 var soln;
                 var solnCost;
-                console.log("Inital Cost: " + bestSolnCost.weightedTotal);
                 for (var i = 0; i < bestSoln.levelSelections.length; i++) {
                     for (var j = 0; j < bestSoln.levelSelections[i].length; j++) {
                         if (!bestSoln.clusterGrid[i][j].isConstrained() && bestSoln.clusterGrid[i][j].lNodes.length > 1) {
@@ -1469,9 +1468,7 @@ function flSolver() {
                             for (var k = 0; k < soln.clusterGrid[i][j].lNodes.length; k++){
                                 soln.levelSelections[i][j] = k;
                                 solnCost = soln.calculateCost(weights, greedyOptions.synthesisOption, costModGrid);
-                                //console.log(solnCost.weightedTotal);
                                 if (solnCost.weightedTotal < bestSolnCost.weightedTotal){
-                                    //console.log("cluster " + i + " " + j + " was changed");
                                     bestSoln = soln.copy();
                                     bestSolnCost = bestSoln.calculateCost(weights, greedyOptions.synthesisOption, costModGrid);
                                 }
@@ -1486,7 +1483,6 @@ function flSolver() {
                 else if (bestSolnCost.weightedTotal == bestTrialSolnCost.weightedTotal){
                     sameCost = true;
                 }
-                console.log("Counter: " + counter + " Cost: " + bestTrialSolnCost.weightedTotal);
                 counter++;
             }
             if (x == 0 || bestTrialSolnCost.weightedTotal < bestOverallSolnCost.weightedTotal){
@@ -2276,7 +2272,6 @@ function $parseFileData(data) {
 function addConstraints(fnodes, lnodes, constraints)
 {
     for (var key in constraints) {
-        console.log("CONSTRAINT USED");
         if (constraints.hasOwnProperty(key)) {
             var index = -1;
             for (var k = 0; k < fnodes.length; k++)
@@ -2314,7 +2309,6 @@ function anneal_fullFactorial_solve(numsLevelsPerFactor, partsLibrary, numCluste
     var fulltemplater = new doeTemplater();
     var fulltemplate = fulltemplater.makeFullFactorial(numsLevelsPerFactor);
     var fullclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2329,7 +2323,6 @@ function anneal_fractionalFactorial_solve(numFactors, resolution, partsLibrary, 
     var factemplater = new doeTemplater();
     var factemplate = factemplater.makeFractionalFactorial(numFactors, resolution);
     var facclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2344,7 +2337,6 @@ function anneal_plackettBurman_solve(numfactors, partsLibrary, numClusterings, a
     var plaburtemplater = new doeTemplater();
     var plaburtemplate = plaburtemplater.makePlackettBurman(numfactors);
     var plaburclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2359,7 +2351,6 @@ function anneal_boxBehnken_solve(numfactors, partsLibrary, numClusterings, annea
     var boxtemplater = new doeTemplater();
     var boxtemplate = boxtemplater.makeBoxBehnken(numfactors);
     var boxclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2374,7 +2365,6 @@ function anneal_custom_solve(data, partsLibrary, numClusterings, annealingOption
     var templater = new doeTemplater();
     var template = templater.parseTemplate("name", data);
     var clusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2389,7 +2379,6 @@ function greedy_fullFactorial_solve(numsLevelsPerFactor, partsLibrary, numCluste
     var fulltemplater = new doeTemplater();
     var fulltemplate = fulltemplater.makeFullFactorial(numsLevelsPerFactor);
     var fullclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2404,7 +2393,6 @@ function greedy_fractionalFactorial_solve(numFactors, resolution, partsLibrary, 
     var factemplater = new doeTemplater();
     var factemplate = factemplater.makeFractionalFactorial(numFactors, resolution);
     var facclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2419,7 +2407,6 @@ function greedy_plackettBurman_solve(numfactors, partsLibrary, numClusterings, g
     var plaburtemplater = new doeTemplater();
     var plaburtemplate = plaburtemplater.makePlackettBurman(numfactors);
     var plaburclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2434,7 +2421,6 @@ function greedy_boxBehnken_solve(numfactors, partsLibrary, numClusterings, greed
     var boxtemplater = new doeTemplater();
     var boxtemplate = boxtemplater.makeBoxBehnken(numfactors);
     var boxclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2449,7 +2435,6 @@ function greedy_custom_solve(data, partsLibrary, numClusterings, greedyOptions, 
     var templater = new doeTemplater();
     var template = templater.parseTemplate("name", data);
     var clusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2464,7 +2449,6 @@ function repGreedy_fullFactorial_solve(numsLevelsPerFactor, partsLibrary, numClu
     var fulltemplater = new doeTemplater();
     var fulltemplate = fulltemplater.makeFullFactorial(numsLevelsPerFactor);
     var fullclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2479,7 +2463,6 @@ function repGreedy_fractionalFactorial_solve(numFactors, resolution, partsLibrar
     var factemplater = new doeTemplater();
     var factemplate = factemplater.makeFractionalFactorial(numFactors, resolution);
     var facclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2494,7 +2477,6 @@ function repGreedy_plackettBurman_solve(numfactors, partsLibrary, numClusterings
     var plaburtemplater = new doeTemplater();
     var plaburtemplate = plaburtemplater.makePlackettBurman(numfactors);
     var plaburclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2509,7 +2491,6 @@ function repGreedy_boxBehnken_solve(numfactors, partsLibrary, numClusterings, gr
     var boxtemplater = new doeTemplater();
     var boxtemplate = boxtemplater.makeBoxBehnken(numfactors);
     var boxclusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2524,7 +2505,6 @@ function repGreedy_custom_solve(data, partsLibrary, numClusterings, greedyOption
     var templater = new doeTemplater();
     var template = templater.parseTemplate("name", data);
     var clusterer = new lClusterer();
-    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
