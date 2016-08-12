@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   version: "2.0.0"
   title: Double Dutch API
-host: localhost:8080
+host: localhost:8090
 schemes:
   - http
   - https
