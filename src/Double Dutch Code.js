@@ -1451,17 +1451,17 @@ function flSolver() {
     this.repGreedySolve = function(clusterGrid, greedyOptions, weights, costModGrid){
         var bestOverallSoln;
         var bestOverallSolnCost;
-        for (var x = 0; x < numTrials; x++) {
+        for (var x = 0; x < greedyOptions.numTrials; x++) {
             var bestTrialSoln;
             var bestTrialSolnCost;
             var counter = 0;
             var sameCost = false;
+            var bestSoln = this.randomSolve(clusterGrid, weights, greedyOptions.synthesisOption, 1, costModGrid);
+            var bestSolnCost = bestSoln.calculateCost(weights, greedyOptions.synthesisOption, costModGrid);
             while(!sameCost) {
                 var soln;
                 var solnCost;
-                var bestSoln = this.randomSolve(clusterGrid, weights, greedyOptions.synthesisOption, 1, costModGrid);
-                var bestSolnCost = bestSoln.calculateCost(weights, greedyOptions.synthesisOption, costModGrid);
-                //console.log("Inital Cost: " + bestSolnCost.weightedTotal);
+                console.log("Inital Cost: " + bestSolnCost.weightedTotal);
                 for (var i = 0; i < bestSoln.levelSelections.length; i++) {
                     for (var j = 0; j < bestSoln.levelSelections[i].length; j++) {
                         if (!bestSoln.clusterGrid[i][j].isConstrained() && bestSoln.clusterGrid[i][j].lNodes.length > 1) {
@@ -1486,12 +1486,12 @@ function flSolver() {
                 else if (bestSolnCost.weightedTotal == bestTrialSolnCost.weightedTotal){
                     sameCost = true;
                 }
-                //console.log("Counter: " + counter + " Cost: " + bestTrialSolnCost.weightedTotal);
+                console.log("Counter: " + counter + " Cost: " + bestTrialSolnCost.weightedTotal);
                 counter++;
             }
             if (x == 0 || bestTrialSolnCost.weightedTotal < bestOverallSolnCost.weightedTotal){
-                bestOverallSoln; = bestSoln.copy();
-                bestOverallSolnCost = bestOverallSoln;.calculateCost(weights, greedyOptions.synthesisOption, costModGrid);
+                bestOverallSoln = bestSoln.copy();
+                bestOverallSolnCost = bestOverallSoln.calculateCost(weights, greedyOptions.synthesisOption, costModGrid);
             }
         }
         return bestOverallSoln;

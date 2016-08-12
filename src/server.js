@@ -10,7 +10,7 @@ var annealRoutes = require('./routes/anneal.js');
 var greedyRoutes = require('./routes/greedy.js');
 var repGreedyRoutes = require('./routes/repGreedy.js');
 server.use(annealRoutes);
-server.use(greedyRoutes;
+server.use(greedyRoutes);
 server.use(repGreedyRoutes);
 
 
