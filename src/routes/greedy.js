@@ -77,7 +77,7 @@ router.post("/greedy/boxBehnken", function(req, res){
 
 router.post("/greedy/custom", function(req, res){
    console.log("WORKED");
-   var DT = req.body.data;
+   var DG = req.body.designGrid;
    var PL = req.body.partsLibrary;
    var GDO = req.body.greedyOptions;
    var WGT = req.body.weights;
@@ -89,7 +89,7 @@ router.post("/greedy/custom", function(req, res){
       CONS = [];
    if (req.body.hasOwnProperty('libraries'))
       LB = req.body.libraries;
-   res.json(doubledutch.greedy_custom_solve(DT,PL,NMC,GDO,WGT,CONS,LB)); 
+   res.json(doubledutch.greedy_custom_solve(DG,PL,NMC,GDO,WGT,CONS,LB)); 
 });
 
 module.exports = router;

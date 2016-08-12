@@ -77,7 +77,7 @@ router.post("/anneal/boxBehnken", function(req, res){
 
 router.post("/anneal/custom", function(req, res){
    console.log("WORKED");
-   var DT = req.body.data;
+   var DG = req.body.designGrid;
    var PL = req.body.partsLibrary;
    var ANLO = req.body.annealingOptions;
    var WGT = req.body.weights;
@@ -89,7 +89,7 @@ router.post("/anneal/custom", function(req, res){
       CONS = [];
    if (req.body.hasOwnProperty('libraries'))
       LB = req.body.libraries;
-   res.json(doubledutch.anneal_custom_solve(DT,PL,NMC,ANLO,WGT,CONS,LB)); 
+   res.json(doubledutch.anneal_custom_solve(DG,PL,NMC,ANLO,WGT,CONS,LB)); 
 });
 
 module.exports = router;

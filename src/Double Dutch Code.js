@@ -2361,9 +2361,9 @@ function anneal_boxBehnken_solve(numfactors, partsLibrary, numClusterings, annea
     return output(results, boxtemplate, fNodes, weights, costobj, libraries);
 }
 
-function anneal_custom_solve(data, partsLibrary, numClusterings, annealingOptions, weights, constraints, libraries) {
+function anneal_custom_solve(designGrid, partsLibrary, numClusterings, annealingOptions, weights, constraints, libraries) {
     var templater = new doeTemplater();
-    var template = templater.parseTemplate("name", data);
+    var template = templater.parseTemplate("name", designGrid);
     var clusterer = new lClusterer();
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
@@ -2431,9 +2431,9 @@ function greedy_boxBehnken_solve(numfactors, partsLibrary, numClusterings, greed
     return output(results, boxtemplate, fNodes, weights, costobj, libraries);
 }
 
-function greedy_custom_solve(data, partsLibrary, numClusterings, greedyOptions, weights, constraints, libraries) {
+function greedy_custom_solve(designGrid, partsLibrary, numClusterings, greedyOptions, weights, constraints, libraries) {
     var templater = new doeTemplater();
-    var template = templater.parseTemplate("name", data);
+    var template = templater.parseTemplate("name", designGrid);
     var clusterer = new lClusterer();
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
@@ -2501,9 +2501,9 @@ function repGreedy_boxBehnken_solve(numfactors, partsLibrary, numClusterings, gr
     return output(results, boxtemplate, fNodes, weights, costobj, libraries);
 }
 
-function repGreedy_custom_solve(data, partsLibrary, numClusterings, greedyOptions, weights, constraints, libraries) {
+function repGreedy_custom_solve(designGrid, partsLibrary, numClusterings, greedyOptions, weights, constraints, libraries) {
     var templater = new doeTemplater();
-    var template = templater.parseTemplate("name", data);
+    var template = templater.parseTemplate("name", designGrid);
     var clusterer = new lClusterer();
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
