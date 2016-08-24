@@ -457,6 +457,137 @@ function lCluster(lNodes, target) {
     };
 }
 
+function fullFactorialTemplate(name, numsLevelsPerFactor, type) { //class
+    this.name = name;
+    this.numsLevelsPerFactor = numsLevelsPerFactor;
+    this.designGrid = [];
+    this.type = type;
+    this.resolution;
+    this.generators;
+    this.rangeGrid = [];
+    this.rangeFreqGrid = []; //aka costModGrid
+    this.rangeMaps = [];
+    var i, j;
+    for (i = 0; i < numsLevelsPerFactor.length; i++) {
+        this.rangeGrid[i] = [];
+        this.rangeFreqGrid[i] = [];
+        this.rangeMaps[i] = {};
+        if (numsLevelsPerFactor[i] == 1) {
+            rangeGrid[i].push(1);
+        } else {
+            for (j = -Math.floor(numsLevelsPerFactor[i]/2); j <= Math.floor(numsLevelsPerFactor[i]/2); j++) {
+                if (j != 0 || numsLevelsPerFactor[i]%2 != 0) {
+                    this.rangeGrid[i].push(j);
+                }
+            }
+        }
+        for (j = 0; j < this.rangeGrid[i].length; j++) {
+            this.rangeMaps[i][hash(this.rangeGrid[i][j])] = j;
+            this.rangeFreqGrid[i][j] = 1;
+        }
+    }
+    this.isEmpty = function() {
+        return this.getDesignGrid().length == 0;
+    };
+    this.isGridValid = function() {
+        var k;
+        for (k = 0; k < this.getDesignGrid().length; k++) {
+            if (this.getDesignGrid()[k].length == 0 || (k > 0 && this.getDesignGrid()[k].length != this.getDesignGrid()[k - 1].length)) {
+                return false;
+            }
+        }
+        return true;
+    };
+    this.isRangeValid = function(numsLevelsPerFactor) {
+        var i;
+        for (i = 0; i < this.rangeGrid.length; i++) {
+            if (this.rangeGrid[i].length == 0) {
+                return false;
+            }
+        }
+        if (arguments.length > 0) {
+            if (this.rangeGrid.length != numsLevelsPerFactor.length) {
+                return false;
+            } else {
+                for (i = 0; i < this.rangeGrid.length; i++) {
+                    if (this.rangeGrid[i].length != numsLevelsPerFactor[i]) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    };
+    this.isRangeValidVsDesign = function(numsLevelsPerFactor) {
+        var i;
+        if (this.rangeGrid.length != numsLevelsPerFactor.length) {
+            return false;
+        } else {
+            for (i = 0; i < this.rangeGrid.length; i++) {
+                if (this.rangeGrid[i].length != numsLevelsPerFactor[i]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+    this.isGridValidVsDesign = function(numFactors) {
+        if (this.isEmpty()) {
+            return false;
+        } else {
+            var k;
+            for (k = 0; k < this.getDesignGrid().length; k++) {
+                if (this.getDesignGrid()[k].length != numFactors) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+    this.indexDesignVsRange = function(k, i) {
+        return this.rangeMaps[i][hash(this.getDesignGrid()[k][i])];
+    };
+    this.getDesignGrid = function() {
+        if (this.designGrid.length == 0 && numsLevelsPerFactor.length > 0) {
+            var ranges = [];
+            var numDesigns = 1;
+            var i, j;
+            for (i = 0; i < numsLevelsPerFactor.length; i++) {
+                ranges.push([]);
+                numDesigns *= numsLevelsPerFactor[i];
+                if (numsLevelsPerFactor[i] == 1) {
+                    ranges[i].push(1);
+                } else {
+                    for (j = -Math.floor(numsLevelsPerFactor[i]/2); j <= Math.floor(numsLevelsPerFactor[i]/2); j++) {
+                        if (j != 0 || numsLevelsPerFactor[i]%2 != 0) {
+                            ranges[i].push(j);
+                        }
+                    }
+                }
+            }
+
+            var k;
+            for (k = 0; k < numDesigns; k++) {
+                this.designGrid.push([]);
+            }
+            var designsPerLevel = 1;
+            j = 0;
+            for (i = 0; i < numsLevelsPerFactor.length; i++) {
+                for (k = 0; k < numDesigns; k++) {
+                    this.designGrid[k].push(ranges[i][j]);
+                    if ((k + 1)%designsPerLevel == 0) {
+                        j++;
+                    }
+                    if (j == numsLevelsPerFactor[i]) {
+                        j = 0;
+                    }
+                }
+                designsPerLevel *= numsLevelsPerFactor[i];
+            }
+        }
+        return this.designGrid;
+    };
+}
 
 function doeTemplate(name, designGrid, type, resolution, generators) { //class
     this.name = name;
@@ -467,13 +598,17 @@ function doeTemplate(name, designGrid, type, resolution, generators) { //class
     this.rangeGrid = [];
     this.rangeFreqGrid = []; //aka costModGrid
     this.rangeMaps = [];
+    this.getDesignGrid = function() {
+        return this.designGrid;
+    };
     this.isEmpty = function() {
-        return this.designGrid.length == 0;
+        var grid = this.getDesignGrid();
+        return (grid.length == 0);
     };
     this.isGridValid = function() {
         var k;
-        for (k = 0; k < this.designGrid.length; k++) {
-            if (this.designGrid[k].length == 0 || (k > 0 && this.designGrid[k].length != this.designGrid[k - 1].length)) {
+        for (k = 0; k < this.getDesignGrid().length; k++) {
+            if (this.getDesignGrid()[k].length == 0 || (k > 0 && this.getDesignGrid()[k].length != this.getDesignGrid()[k - 1].length)) {
                 return false;
             }
         }
@@ -551,8 +686,8 @@ function doeTemplate(name, designGrid, type, resolution, generators) { //class
             return false;
         } else {
             var k;
-            for (k = 0; k < this.designGrid.length; k++) {
-                if (this.designGrid[k].length != numFactors) {
+            for (k = 0; k < this.getDesignGrid().length; k++) {
+                if (this.getDesignGrid()[k].length != numFactors) {
                     return false;
                 }
             }
@@ -560,7 +695,7 @@ function doeTemplate(name, designGrid, type, resolution, generators) { //class
         return true;
     };
     this.indexDesignVsRange = function(k, i) {
-        return this.rangeMaps[i][hash(this.designGrid[k][i])];
+        return this.rangeMaps[i][hash(this.getDesignGrid()[k][i])];
     };
 }
 
@@ -569,45 +704,7 @@ function doeTemplater() { //function
     this.doeTypes = {fullFactorial: "fullFactorial", fractionalFactorial: "fractionalFactorial", plackettBurman: "plackettBurman",
         boxBehnken: "boxBehnken"};
     this.makeFullFactorial = function(numsLevelsPerFactor) {
-        var designGrid = [];
-        if (numsLevelsPerFactor.length > 0) {
-            var ranges = [];
-            var numDesigns = 1;
-            var i, j;
-            for (i = 0; i < numsLevelsPerFactor.length; i++) {
-                ranges.push([]);
-                numDesigns *= numsLevelsPerFactor[i];
-                if (numsLevelsPerFactor[i] == 1) {
-                    ranges[i].push(1);
-                } else {
-                    for (j = -Math.floor(numsLevelsPerFactor[i]/2); j <= Math.floor(numsLevelsPerFactor[i]/2); j++) {
-                        if (j != 0 || numsLevelsPerFactor[i]%2 != 0) {
-                            ranges[i].push(j);
-                        }
-                    }
-                }
-            }
-
-            var k;
-            for (k = 0; k < numDesigns; k++) {
-                designGrid.push([]);
-            }
-            var designsPerLevel = 1;
-            j = 0;
-            for (i = 0; i < numsLevelsPerFactor.length; i++) {
-                for (k = 0; k < numDesigns; k++) {
-                    designGrid[k].push(ranges[i][j]);
-                    if ((k + 1)%designsPerLevel == 0) {
-                        j++;
-                    }
-                    if (j == numsLevelsPerFactor[i]) {
-                        j = 0;
-                    }
-                }
-                designsPerLevel *= numsLevelsPerFactor[i];
-            }
-        }
-        return new doeTemplate(this.makeFullFactorialName(numsLevelsPerFactor), designGrid, this.doeTypes.fullFactorial);
+        return new fullFactorialTemplate(this.makeFullFactorialName(numsLevelsPerFactor), numsLevelsPerFactor, this.doeTypes.fullFactorial);
     };
     this.makeFullFactorialName = function(numsLevelsPerFactor) {
         var templateName;
@@ -659,9 +756,9 @@ function doeTemplater() { //function
                 }
                 var fullFactorial = templater.makeFullFactorial(numsLevelsPerFactor);
                 var k;
-                for (k = 0; k < fullFactorial.designGrid.length; k++) {
-                    for (i = 0; i < fullFactorial.designGrid[k].length; i++) {
-                        baseFactors[i].push(fullFactorial.designGrid[k][i]);
+                for (k = 0; k < fullFactorial.getDesignGrid().length; k++) {
+                    for (i = 0; i < fullFactorial.getDesignGrid()[k].length; i++) {
+                        baseFactors[i].push(fullFactorial.getDesignGrid()[k][i]);
                     }
                 }
                 return baseFactors;
@@ -811,12 +908,12 @@ function doeTemplater() { //function
                         k++;
                     }
                 } else {
-                    for (m = 0; m < fullFactorial.designGrid.length; m++) {
+                    for (m = 0; m < fullFactorial.getDesignGrid().length; m++) {
                         n = 0;
                         designGrid.push([]);
                         for (i = 0; i < bbSeed[b].length; i++) {
                             if (bbSeed[b][i] == 1) {
-                                designGrid[k].push(fullFactorial.designGrid[m][n]);
+                                designGrid[k].push(fullFactorial.getDesignGrid()[m][n]);
                                 n++;
                             } else {
                                 designGrid[k].push(bbSeed[b][i]);
@@ -883,8 +980,8 @@ function doeTemplater() { //function
             outputData[0][i + 1] = "Factor " + i;
         }
         var k;
-        for (k = 0; k < template.designGrid.length; k++) {
-            outputData.push([k + 1].concat(template.designGrid[k]));
+        for (k = 0; k < template.getDesignGrid().length; k++) {
+            outputData.push([k + 1].concat(template.getDesignGrid()[k]));
         }
         if (template.generators != null) {
             outputData[0].push("Generators");
@@ -1461,6 +1558,7 @@ function flSolver() {
             while(!sameCost) {
                 var soln;
                 var solnCost;
+                console.log("Inital Cost: " + bestSolnCost.weightedTotal);
                 for (var i = 0; i < bestSoln.levelSelections.length; i++) {
                     for (var j = 0; j < bestSoln.levelSelections[i].length; j++) {
                         if (!bestSoln.clusterGrid[i][j].isConstrained() && bestSoln.clusterGrid[i][j].lNodes.length > 1) {
@@ -1468,7 +1566,9 @@ function flSolver() {
                             for (var k = 0; k < soln.clusterGrid[i][j].lNodes.length; k++){
                                 soln.levelSelections[i][j] = k;
                                 solnCost = soln.calculateCost(weights, greedyOptions.synthesisOption, costModGrid);
+                                //console.log(solnCost.weightedTotal);
                                 if (solnCost.weightedTotal < bestSolnCost.weightedTotal){
+                                    //console.log("cluster " + i + " " + j + " was changed");
                                     bestSoln = soln.copy();
                                     bestSolnCost = bestSoln.calculateCost(weights, greedyOptions.synthesisOption, costModGrid);
                                 }
@@ -1483,6 +1583,7 @@ function flSolver() {
                 else if (bestSolnCost.weightedTotal == bestTrialSolnCost.weightedTotal){
                     sameCost = true;
                 }
+                console.log("Counter: " + counter + " Cost: " + bestTrialSolnCost.weightedTotal);
                 counter++;
             }
             if (x == 0 || bestTrialSolnCost.weightedTotal < bestOverallSolnCost.weightedTotal){
@@ -1915,9 +2016,9 @@ function output(result, template, $fldNodes, weightsobj, costobj, libraries){
             $fldNodes[i].children.sort(function(a, b) {return a.parameter.value - b.parameter.value});
         }
         var j, k;
-        for (k = 0; k < $selectedTemplateA.designGrid.length; k++) {
+        for (k = 0; k < $selectedTemplateA.getDesignGrid().length; k++) {
             outputData.push([]);
-            for (i = 0; i < $selectedTemplateA.designGrid[k].length; i++) {
+            for (i = 0; i < $selectedTemplateA.getDesignGrid()[k].length; i++) {
                 j = $selectedTemplateA.indexDesignVsRange(k, i);
                 outputData[k + 1].push($fldNodes[i].children[j].bioDesign.name);
             }
@@ -1932,9 +2033,9 @@ function output(result, template, $fldNodes, weightsobj, costobj, libraries){
             $fldNodes[i].children.sort(function(a, b) {return a.parameter.value - b.parameter.value});
         }
         var j, k;
-        for (k = 0; k < $selectedTemplateA.designGrid.length; k++) {
+        for (k = 0; k < $selectedTemplateA.getDesignGrid().length; k++) {
             outputData.push([]);
-            for (i = 0; i < $selectedTemplateA.designGrid[k].length; i++) {
+            for (i = 0; i < $selectedTemplateA.getDesignGrid()[k].length; i++) {
                 j = $selectedTemplateA.indexDesignVsRange(k, i);
                 outputData[k + 1].push($fldNodes[i].children[j].parameter.value);
             }
@@ -1985,6 +2086,7 @@ function output(result, template, $fldNodes, weightsobj, costobj, libraries){
     return jsonoutput;
 
 }
+
 
 
 var expressGrammar = {
@@ -2272,6 +2374,7 @@ function $parseFileData(data) {
 function addConstraints(fnodes, lnodes, constraints)
 {
     for (var key in constraints) {
+        console.log("CONSTRAINT USED");
         if (constraints.hasOwnProperty(key)) {
             var index = -1;
             for (var k = 0; k < fnodes.length; k++)
@@ -2309,6 +2412,7 @@ function anneal_fullFactorial_solve(numsLevelsPerFactor, partsLibrary, numCluste
     var fulltemplater = new doeTemplater();
     var fulltemplate = fulltemplater.makeFullFactorial(numsLevelsPerFactor);
     var fullclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2323,6 +2427,7 @@ function anneal_fractionalFactorial_solve(numFactors, resolution, partsLibrary, 
     var factemplater = new doeTemplater();
     var factemplate = factemplater.makeFractionalFactorial(numFactors, resolution);
     var facclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2337,6 +2442,7 @@ function anneal_plackettBurman_solve(numfactors, partsLibrary, numClusterings, a
     var plaburtemplater = new doeTemplater();
     var plaburtemplate = plaburtemplater.makePlackettBurman(numfactors);
     var plaburclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2351,6 +2457,7 @@ function anneal_boxBehnken_solve(numfactors, partsLibrary, numClusterings, annea
     var boxtemplater = new doeTemplater();
     var boxtemplate = boxtemplater.makeBoxBehnken(numfactors);
     var boxclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2361,10 +2468,11 @@ function anneal_boxBehnken_solve(numfactors, partsLibrary, numClusterings, annea
     return output(results, boxtemplate, fNodes, weights, costobj, libraries);
 }
 
-function anneal_custom_solve(designGrid, partsLibrary, numClusterings, annealingOptions, weights, constraints, libraries) {
+function anneal_custom_solve(data, partsLibrary, numClusterings, annealingOptions, weights, constraints, libraries) {
     var templater = new doeTemplater();
-    var template = templater.parseTemplate("name", designGrid);
+    var template = templater.parseTemplate("name", data);
     var clusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2379,6 +2487,7 @@ function greedy_fullFactorial_solve(numsLevelsPerFactor, partsLibrary, numCluste
     var fulltemplater = new doeTemplater();
     var fulltemplate = fulltemplater.makeFullFactorial(numsLevelsPerFactor);
     var fullclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2393,6 +2502,7 @@ function greedy_fractionalFactorial_solve(numFactors, resolution, partsLibrary, 
     var factemplater = new doeTemplater();
     var factemplate = factemplater.makeFractionalFactorial(numFactors, resolution);
     var facclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2407,6 +2517,7 @@ function greedy_plackettBurman_solve(numfactors, partsLibrary, numClusterings, g
     var plaburtemplater = new doeTemplater();
     var plaburtemplate = plaburtemplater.makePlackettBurman(numfactors);
     var plaburclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2421,6 +2532,7 @@ function greedy_boxBehnken_solve(numfactors, partsLibrary, numClusterings, greed
     var boxtemplater = new doeTemplater();
     var boxtemplate = boxtemplater.makeBoxBehnken(numfactors);
     var boxclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2431,10 +2543,11 @@ function greedy_boxBehnken_solve(numfactors, partsLibrary, numClusterings, greed
     return output(results, boxtemplate, fNodes, weights, costobj, libraries);
 }
 
-function greedy_custom_solve(designGrid, partsLibrary, numClusterings, greedyOptions, weights, constraints, libraries) {
+function greedy_custom_solve(data, partsLibrary, numClusterings, greedyOptions, weights, constraints, libraries) {
     var templater = new doeTemplater();
-    var template = templater.parseTemplate("name", designGrid);
+    var template = templater.parseTemplate("name", data);
     var clusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2449,6 +2562,7 @@ function repGreedy_fullFactorial_solve(numsLevelsPerFactor, partsLibrary, numClu
     var fulltemplater = new doeTemplater();
     var fulltemplate = fulltemplater.makeFullFactorial(numsLevelsPerFactor);
     var fullclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2463,6 +2577,7 @@ function repGreedy_fractionalFactorial_solve(numFactors, resolution, partsLibrar
     var factemplater = new doeTemplater();
     var factemplate = factemplater.makeFractionalFactorial(numFactors, resolution);
     var facclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2477,6 +2592,7 @@ function repGreedy_plackettBurman_solve(numfactors, partsLibrary, numClusterings
     var plaburtemplater = new doeTemplater();
     var plaburtemplate = plaburtemplater.makePlackettBurman(numfactors);
     var plaburclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2491,6 +2607,7 @@ function repGreedy_boxBehnken_solve(numfactors, partsLibrary, numClusterings, gr
     var boxtemplater = new doeTemplater();
     var boxtemplate = boxtemplater.makeBoxBehnken(numfactors);
     var boxclusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
@@ -2501,10 +2618,11 @@ function repGreedy_boxBehnken_solve(numfactors, partsLibrary, numClusterings, gr
     return output(results, boxtemplate, fNodes, weights, costobj, libraries);
 }
 
-function repGreedy_custom_solve(designGrid, partsLibrary, numClusterings, greedyOptions, weights, constraints, libraries) {
+function repGreedy_custom_solve(data, partsLibrary, numClusterings, greedyOptions, weights, constraints, libraries) {
     var templater = new doeTemplater();
-    var template = templater.parseTemplate("name", designGrid);
+    var template = templater.parseTemplate("name", data);
     var clusterer = new lClusterer();
+    console.log("TEST");
     var allnodes = new $parseFileData(partsLibrary);
     var fNodes = addConstraints(allnodes.$fNodes,allnodes.$lNodes,constraints);
     var lNodes = allnodes.$lNodes;
