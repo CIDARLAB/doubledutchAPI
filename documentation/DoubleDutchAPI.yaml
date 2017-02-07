@@ -115,7 +115,7 @@ paths:
   /greedy/fullFactorial:
     post:
       description: |
-        Designs a genetic library based on a full factorial design with any number of factors and any number of levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the full factorial design.
+        Designs a genetic library based on a full factorial design with any number of factors and any number of levels per factor. Uses a greedy search to assign part modules for controlling gene expression to the full factorial design.
       parameters:
         - name: fullFactorialinput 
           in: body
@@ -140,7 +140,7 @@ paths:
   /greedy/fractionalFactorial:
     post:
       description: |
-        Designs a genetic library based on a fractional factorial design with any number of factors and 2 levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the fractional factorial design.
+        Designs a genetic library based on a fractional factorial design with any number of factors and 2 levels per factor. Uses a greedy search to assign part modules for controlling gene expression to the fractional factorial design.
       parameters:
         - name: fractionalFactorialinput 
           in: body
@@ -165,7 +165,7 @@ paths:
   /greedy/plackettBurman:
     post:
       description: |
-        Designs a genetic library based on a Plackett-Burman design (2 levels per factor) with up to 23 factors. Uses simulated annealing to assign part modules for controlling gene expression to the Plackett-Burman design.
+        Designs a genetic library based on a Plackett-Burman design (2 levels per factor) with up to 23 factors. Uses a greedy search to assign part modules for controlling gene expression to the Plackett-Burman design.
       parameters:
         - name: plackettBurmaninput 
           in: body
@@ -190,7 +190,7 @@ paths:
   /greedy/boxBehnken:
     post:
       description: |
-        Designs a genetic library based on a Box-Behnken design (3 levels per factor) with between 3 and 12 factors (but not 8). Uses simulated annealing to assign part modules for controlling gene expression to the Box-Behnken design.
+        Designs a genetic library based on a Box-Behnken design (3 levels per factor) with between 3 and 12 factors (but not 8). Uses a greedy search to assign part modules for controlling gene expression to the Box-Behnken design.
       parameters:
         - name: boxBehnkeninput 
           in: body
@@ -215,7 +215,7 @@ paths:
   /rep/fullFactorial:
     post:
       description: |
-        Designs a genetic library based on a full factorial design with any number of factors and any number of levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the full factorial design.
+        Designs a genetic library based on a full factorial design with any number of factors and any number of levels per factor. Uses multiple greedy searches (in series) to assign part modules for controlling gene expression to the full factorial design.
       parameters:
         - name: fullFactorialinput 
           in: body
@@ -240,7 +240,7 @@ paths:
   /rep/fractionalFactorial:
     post:
       description: |
-        Designs a genetic library based on a fractional factorial design with any number of factors and 2 levels per factor. Uses simulated annealing to assign part modules for controlling gene expression to the fractional factorial design.
+        Designs a genetic library based on a fractional factorial design with any number of factors and 2 levels per factor. Uses multiple greedy searches (in series) to assign part modules for controlling gene expression to the fractional factorial design.
       parameters:
         - name: fractionalFactorialinput 
           in: body
@@ -265,7 +265,7 @@ paths:
   /rep/plackettBurman:
     post:
       description: |
-        Designs a genetic library based on a Plackett-Burman design (2 levels per factor) with up to 23 factors. Uses simulated annealing to assign part modules for controlling gene expression to the Plackett-Burman design.
+        Designs a genetic library based on a Plackett-Burman design (2 levels per factor) with up to 23 factors. Uses multiple greedy searches (in series) to assign part modules for controlling gene expression to the Plackett-Burman design.
       parameters:
       
         - name: plackettBurmaninput 
@@ -291,7 +291,7 @@ paths:
   /rep/boxBehnken:
     post:
       description: |
-        Designs a genetic library based on a Box-Behnken design (3 levels per factor) with between 3 and 12 factors (but not 8). Uses simulated annealing to assign part modules for controlling gene expression to the Box-Behnken design.
+        Designs a genetic library based on a Box-Behnken design (3 levels per factor) with between 3 and 12 factors (but not 8). Uses multiple greedy searches (in series) to assign part modules for controlling gene expression to the Box-Behnken design.
       parameters:
         - name: boxBehnkeninput 
           in: body
@@ -315,7 +315,7 @@ paths:
             
 definitions:
   annealFullFactorial:
-    description: Full factorial design parameters. The number of factors and number of levels per factor are encoded by numsLevelsPerFactor. For example, a 5 by 3 full factorial design would have a numsLevelsPerFactor of [3, 3, 3, 3, 3]. If some factors in such a design only take on 2 levels, then numsLevelPerFactor could be [3, 3, 3, 2, 2].
+    description: Full factorial design parameters for simulated annealing. The number of factors and number of levels per factor are encoded by numsLevelsPerFactor. For example, a 5 by 3 full factorial design would have a numsLevelsPerFactor of [3, 3, 3, 3, 3]. If some factors in such a design only take on 2 levels, then numsLevelPerFactor could be [3, 3, 3, 2, 2].
     properties:
       numsLevelsPerFactor:
         type: array
@@ -337,7 +337,7 @@ definitions:
         description: "keys are geneIDs, while values are arrays of strings with the lnode names"
         
   annealFracFactorial:
-    description: Fractional factorial design parameters
+    description: Fractional factorial design parameters for simulated annealing
     properties:
       numFactors:
         type: number
@@ -362,7 +362,7 @@ definitions:
         description: "keys are geneIDs, while values are arrays of strings with the lnode names"  
       
   annealPlackettBurman:
-    description: Plackett-Burman/Box-Behnken design parameters
+    description: Plackett-Burman/Box-Behnken design parameters for simulated annealing
     properties:
       numFactors:
         type: number
@@ -383,7 +383,7 @@ definitions:
         description: "keys are geneIDs, while values are arrays of strings with the lnode names"  
   
   annealBoxBehnken:
-    description: Plackett-Burman/Box-Behnken design parameters
+    description: Plackett-Burman/Box-Behnken design parameters for simulated annealing
     properties:
       numFactors:
         type: number
@@ -404,7 +404,7 @@ definitions:
         description: "keys are geneIDs, while values are arrays of strings with the lnode names"
         
   greedyFullFactorial:
-    description: Full factorial design parameters. The number of factors and number of levels per factor are encoded by numsLevelsPerFactor. For example, a 5 by 3 full factorial design would have a numsLevelsPerFactor of [3, 3, 3, 3, 3]. If some factors in such a design only take on 2 levels, then numsLevelPerFactor could be [3, 3, 3, 2, 2].
+    description: Full factorial design parameters for greedy search. The number of factors and number of levels per factor are encoded by numsLevelsPerFactor. For example, a 5 by 3 full factorial design would have a numsLevelsPerFactor of [3, 3, 3, 3, 3]. If some factors in such a design only take on 2 levels, then numsLevelPerFactor could be [3, 3, 3, 2, 2].
     properties:
       numsLevelsPerFactor:
         type: array
@@ -426,7 +426,7 @@ definitions:
         description: "keys are geneIDs, while values are arrays of strings with the lnode names"
         
   greedyFracFactorial:
-    description: Fractional factorial design parameters
+    description: Fractional factorial design parameters for greedy search
     properties:
       numFactors:
         type: number
@@ -451,7 +451,7 @@ definitions:
         description: "keys are geneIDs, while values are arrays of strings with the lnode names"  
       
   greedyPlackettBurman:
-    description: Plackett-Burman/Box-Behnken design parameters
+    description: Plackett-Burman/Box-Behnken design parameters for greedy search
     properties:
       numFactors:
         type: number
@@ -472,7 +472,7 @@ definitions:
         description: "keys are geneIDs, while values are arrays of strings with the lnode names"  
   
   greedyBoxBehnken:
-    description: Plackett-Burman/Box-Behnken design parameters
+    description: Plackett-Burman/Box-Behnken design parameters for greedy search
     properties:
       numFactors:
         type: number
@@ -545,7 +545,7 @@ definitions:
       numTrials:
         type: number
         format: integer
-        description: Number of trials of greedy
+        description: Number of greedy searches. For the repetitive greedy strategy, each seach starts where the previous search ended.
       synthesisOption:
         type: string
         enum: ["minimize", "maximize"]
